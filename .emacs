@@ -25,9 +25,12 @@
      ("#A75B00" . 70)
      ("#F309DF" . 85)
      ("#424748" . 100))))
+
+ ;; start fullscreen
  '(inhibit-startup-screen nil)
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(magit-diff-use-overlays nil)
+ '(package-selected-packages (quote (jedi atom-one-dark-theme)))
  '(pos-tip-background-color "#E6DB74")
  '(pos-tip-foreground-color "#242728")
  '(show-paren-mode t)
@@ -63,9 +66,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#242728" :foreground "#f8fbfc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "unknown" :family "Hack")))))
 
-(add-to-list 'custom-theme-load-path' "~/.emacs.d/themes/")
-
-
+;; MELPA CONFIGURATION
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -78,6 +79,7 @@
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
+;; making atom-one-dark theme default
 (load-theme 'atom-one-dark t)
 
 ;; Jedi
@@ -102,9 +104,6 @@
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
 
-
-
-
 ;; Pylint
 (setq python-check-command "pylint --msg-template='{path}:{line}: [{msg_id}, {obj}] {msg}'")
 
@@ -124,7 +123,7 @@
 ;; Set as a minor mode for Python
 (add-hook 'python-mode-hook '(lambda () (flymake-mode)))
 
-; To avoid having to mouse hover for the error message, these functions make flymake error messages
+                                        ; To avoid having to mouse hover for the error message, these functions make flymake error messages
 ;; appear in the minibuffer
 (defun show-fly-err-at-point ()
   "If the cursor is sitting on a flymake error, display the message in the minibuffer"
@@ -133,8 +132,8 @@
   (let ((line-no (line-number-at-pos)))
     (dolist (elem flymake-err-info)
       (if (eq (car elem) line-no)
-      (let ((err (car (second elem))))
-        (message "%s" (flymake-ler-text err)))))))
+          (let ((err (car (second elem))))
+            (message "%s" (flymake-ler-text err)))))))
 (add-hook 'post-command-hook 'show-fly-err-at-point)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
