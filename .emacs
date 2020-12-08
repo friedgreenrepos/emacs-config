@@ -7,7 +7,7 @@
  '(inhibit-startup-screen t)
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(auctex auto-complete-auctex projectile latex-preview-pane jedi))
+   '(magit web-mode json-mode auctex auto-complete-auctex projectile latex-preview-pane jedi))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -15,6 +15,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(setq user-full-name "Giulia Calanca"
+      user-mail-address "giuliacalanca13@gmail.com"
+      calendar-latitude 44.78
+      calendar-longitude 10.88
+      calendar-location-name "Carpi (MO), Italy")
 
 ;; Melpa configuration
 (require 'package)
@@ -25,10 +31,21 @@
 (setq jedi:complete-on-dot t)      ; optional
 (setq jedi:setup-keys t)           ;; attiva le shortcut di default
 
+(add-hook 'python-mode-hook
+      (lambda ()
+        (setq indent-tabs-mode nil)
+        (setq python-indent 4)
+        (setq tab-width 4))
+      (untabify (point-min) (point-max)))
+
+;; enable Elpy by default
+;;(package-initialize)
+;;(elpy-enable)
+
 ;; latex-preview-pane to load automatically with your LaTeX files
 (latex-preview-pane-enable)
 
-;; beginning of duplicate line remapping
+;;;;;;;;;;; beginning of duplicate line remapping ;;;;;;;;;;;
 ;; Remap C-d to duplicate a line instead of deleting a character
 (defun duplicate-line (arg)
   "Duplicate current line, leaving point in lower line."
@@ -66,8 +83,80 @@
   (next-line arg))
 
 (global-set-key (kbd "C-d") 'duplicate-line)
-;; end of duplicate line remapping
+;;;;;;;;;;; end of duplicate line remapping ;;;;;;;;;;;
 
 ;; auto close bracket insertion
 (electric-pair-mode 1)
+
+;; set zsh as default shell
+(setq shell-file-name (executable-find "/usr/bin/zsh")) 
+
+;; web-mode.el configuration
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+;; disable tool bar and menu bar
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+
+;; use fancy lambdas
+;;(global-prettify-symbols-mode t)
+
+;; softly highlight the current line
+(global-hl-line-mode 1)
+
+;; move cursor by camelCase
+;; 1 for on, 0 for off
+(global-subword-mode 1)
+
+
+;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+(defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer :ignore-auto :noconfirm))
+
+;; y/n over yes/no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; auto update buffers
+(global-auto-revert-mode t)
+
+;; recent files
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
+;; Delete selected region automatically when typing
+(delete-selection-mode 1)
+
+;;;;;;;;;;;;;;;;;;; ORG MODE config ;;;;;;;;;;;;;;;;;;;
+
+;; I like to see an outline of pretty bullets instead of a list of asterisks
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; I like seeing a little downward-pointing arrow instead of the usual ellipsis
+;; that org displays when there’s stuff under a header.
+(setq org-ellipsis "⤵")
+
+(setq org-hide-emphasis-markers t)
+
+;; Use syntax highlighting in source blocks while editing.
+(setq org-src-fontify-natively t)
+
+;; Bind a few handy keys
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cc" 'org-capture)
+
+;; Enable key bindings for structural blocks
+;; such as ‘#+BEGIN_SRC’ … ‘#+END_SRC’
+(require 'org-tempo)
+
+;; Enable evaluation source blocks
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ruby . t)
+   (python . t)))
 
