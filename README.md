@@ -12,6 +12,7 @@ My custom emacs config and packages.
 - Install **latex-preview-pane**. Read [the wiki](https://www.emacswiki.org/emacs/LaTeXPreviewPane) for more info.
 - Install **auctex**, read [the wiki](https://www.emacswiki.org/emacs/AUCTeX) for more info.
 - Install **projectile**, read [the wiki]()
+- Install **magit**, **web-mode**, **json-mode** from melpa
 - Remap C-d to duplicate a line
 ```
 ;; Remap C-d to duplicate a line instead of deleting a character
@@ -52,7 +53,11 @@ My custom emacs config and packages.
 
 (global-set-key (kbd "C-d") 'duplicate-line)
 ;; end of duplicate line remapping
+
 ```
+## Org mode
+I still keep my org mode configuration inside .emacs file... Most likely it's not the best way to do it but ¯\_(ツ)_/¯ 
+
 ## Optional (currently not installed):
 - Download and install Hack font from [here](https://sourcefoundry.org/hack/)
 - Install atom-one-dark theme from [this repo](https://github.com/jonathanchu/atom-one-dark-theme)
