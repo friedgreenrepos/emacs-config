@@ -7,7 +7,7 @@
  '(inhibit-startup-screen t)
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(magit web-mode json-mode auctex auto-complete-auctex projectile latex-preview-pane jedi))
+   '(base16-theme which-key ein use-package flycheck pylint magit web-mode json-mode projectile latex-preview-pane jedi))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -89,7 +89,7 @@
 (electric-pair-mode 1)
 
 ;; set zsh as default shell
-(setq shell-file-name (executable-find "/usr/bin/zsh")) 
+(setq shell-file-name (executable-find "/usr/bin/zsh"))
 
 ;; web-mode.el configuration
 (require 'web-mode)
@@ -109,6 +109,8 @@
 ;; 1 for on, 0 for off
 (global-subword-mode 1)
 
+;; emacs ipython notebook configuration
+(require 'ein)
 
 ;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
 (defun revert-buffer-no-confirm ()
@@ -122,13 +124,31 @@
 ;; auto update buffers
 (global-auto-revert-mode t)
 
-;; recent files
+;; add recent files key-binding
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
 ;; Delete selected region automatically when typing
 (delete-selection-mode 1)
+
+;; setup flycheck using use-package
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; soft-wrap lines
+(global-visual-line-mode 1)
+
+;; which-key is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
+
+;; Remove trailing whitespace from the entire buffer while saving
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;;;;;;;;;;;;;;;;;;; ORG MODE config ;;;;;;;;;;;;;;;;;;;
 
@@ -160,3 +180,14 @@
  '((ruby . t)
    (python . t)))
 
+;; Org-mode uses org-file-apps to decide how to open a file,
+;; this snippet overrides how Org-mode opens files.
+(setq org-file-apps
+    (quote
+      ((auto-mode . emacs)
+       ("\\.mm\\'" . default)
+       ("\\.x?html?\\'" . "/usr/bin/firefox %s")
+       ("\\.pdf\\'" . default))))
+
+;; Org-drill flashcards
+(require 'org-drill)
