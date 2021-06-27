@@ -4,10 +4,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(tsdh-dark))
+ '(custom-safe-themes
+   '("3de3f36a398d2c8a4796360bfce1fa515292e9f76b655bb9a377289a6a80a132" default))
  '(inhibit-startup-screen t)
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(base16-theme which-key ein use-package flycheck pylint magit web-mode json-mode projectile latex-preview-pane jedi))
+   '(drag-stuff org-fragtog org-download auctex base16-theme which-key ein use-package flycheck pylint magit web-mode json-mode projectile latex-preview-pane jedi))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -21,6 +23,10 @@
       calendar-latitude 44.78
       calendar-longitude 10.88
       calendar-location-name "Carpi (MO), Italy")
+
+
+;; Set default font
+(set-frame-font "Inconsolata-12" nil t)
 
 ;; Melpa configuration
 (require 'package)
@@ -95,9 +101,10 @@
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;; disable tool bar and menu bar
+;; disable tool, menu and scroll bar
 (tool-bar-mode 0)
 (menu-bar-mode 0)
+(toggle-scroll-bar 0)
 
 ;; use fancy lambdas
 ;;(global-prettify-symbols-mode t)
@@ -150,6 +157,11 @@
 ;; Remove trailing whitespace from the entire buffer while saving
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(use-package drag-stuff
+  :ensure t
+  :config
+  (drag-stuff-define-keys))
+
 ;;;;;;;;;;;;;;;;;;; ORG MODE config ;;;;;;;;;;;;;;;;;;;
 
 ;; I like to see an outline of pretty bullets instead of a list of asterisks
@@ -191,3 +203,18 @@
 
 ;; Org-drill flashcards
 (require 'org-drill)
+
+;; Org-downlad: this extension facilitates moving images
+;; from point A to point B.
+(use-package org-download
+  :ensure t
+  :config
+  ;; add support to dired
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
+;; org-fragtog: Automatically toggle Org mode LaTeX fragment previews
+;; as the cursor enters and exits them
+(use-package org-fragtog
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook 'org-fragtog-mode))
