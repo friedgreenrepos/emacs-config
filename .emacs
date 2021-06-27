@@ -9,7 +9,7 @@
  '(inhibit-startup-screen t)
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(drag-stuff org-fragtog org-download auctex base16-theme which-key ein use-package flycheck pylint magit web-mode json-mode projectile latex-preview-pane jedi))
+   '(org-fragtog org-download auctex base16-theme which-key ein use-package flycheck pylint magit web-mode json-mode projectile latex-preview-pane jedi))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -23,7 +23,6 @@
       calendar-latitude 44.78
       calendar-longitude 10.88
       calendar-location-name "Carpi (MO), Italy")
-
 
 ;; Set default font
 (set-frame-font "Inconsolata-12" nil t)
@@ -91,6 +90,9 @@
 (global-set-key (kbd "C-d") 'duplicate-line)
 ;;;;;;;;;;; end of duplicate line remapping ;;;;;;;;;;;
 
+;; bind C-v to yank (overwrites default)
+(global-set-key (kbd "C-v") 'yank)
+
 ;; auto close bracket insertion
 (electric-pair-mode 1)
 
@@ -157,10 +159,25 @@
 ;; Remove trailing whitespace from the entire buffer while saving
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(use-package drag-stuff
-  :ensure t
-  :config
-  (drag-stuff-define-keys))
+
+;; move lines up and down (bound to M-up, M-down)
+(defun move-line-up ()
+  "Move up the current line."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2)
+  (indent-according-to-mode))
+
+(defun move-line-down ()
+  "Move down the current line."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(global-set-key (kbd "M-<up>") 'move-line-up)
+(global-set-key (kbd "M-<down>") 'move-line-down)
 
 ;;;;;;;;;;;;;;;;;;; ORG MODE config ;;;;;;;;;;;;;;;;;;;
 
