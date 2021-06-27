@@ -16,9 +16,12 @@ My custom emacs config and packages.
 - projectile
 - latex-preview-pane
 - jedi
+- drag-stuff
 - org-tempo
 - org-drill
 - org-bullets
+- org-fragtog
+- org-download
 4. Restart Emacs
 5. Enjoy!
 ## Packages currently not installed
