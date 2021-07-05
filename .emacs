@@ -25,7 +25,7 @@
       calendar-location-name "Carpi (MO), Italy")
 
 ;; Set default font
-(set-frame-font "Inconsolata-12" nil t)
+(set-frame-font "Hack-11" nil t)
 
 ;; Melpa configuration
 (require 'package)
@@ -49,6 +49,16 @@
 
 ;; latex-preview-pane to load automatically with your LaTeX files
 (latex-preview-pane-enable)
+
+;; simple copy line function bound to C-C C-k
+(defun copy-line (arg)
+  "Copy lines (as many as prefix argument) in the kill ring"
+  (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+(global-set-key "\C-c\C-k" 'copy-line)
 
 ;;;;;;;;;;; beginning of duplicate line remapping ;;;;;;;;;;;
 ;; Remap C-d to duplicate a line instead of deleting a character
@@ -95,6 +105,11 @@
 
 ;; auto close bracket insertion
 (electric-pair-mode 1)
+
+;; disable <> auto pairing
+(setq electric-pair-inhibit-predicate
+      `(lambda (c)
+         (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
 
 ;; set zsh as default shell
 (setq shell-file-name (executable-find "/usr/bin/zsh"))
@@ -235,3 +250,5 @@
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-fragtog-mode))
+
+(setq org-image-actual-width nil)
